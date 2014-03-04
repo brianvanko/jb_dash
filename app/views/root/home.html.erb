@@ -1,0 +1,259 @@
+<div class='media'>
+	<a class='pull-left'><img data-src="holder.js/150%x150" class="img-rounded media-object" style="width: 150px; height: 150px;" src="<%= "http://jawbone.com/#{@current_user.up_image}" %>"></img></a>
+	<div class='media-body'>
+		<h1 class='media-heading'>Welcome <%= @current_user.first_name %> <%= @current_user.last_name %></h1>
+		<h4>Latest Activity on <%= @moves.today.last_updated %></h4>
+		<h6>Steps per Day Goal: <%= @goals.move_steps %></h6>
+		<h6>Hours of Sleep per Day Goal: <%= @goals.sleep_total %></h6>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	function switchMe(){
+ 		$("#m").toggle();
+	    $("#s").toggle();
+ 	}
+</script>
+
+<br>
+<%= javascript_include_tag "highcharts" %>
+<h2>Steps Data Dashboard</h2>
+<table>
+	<tr>
+		<td id="s"><div id="steps_chart" style="width: 375px; height: 300px;"></div></td>
+		<td id="m"><div id="moves_chart" style="width: 375px; height: 300px;"></div></td>
+		<td><div id="burn_chart" style="width: 375px; height: 300px;"></div></td>
+	</tr>
+	<tr>
+		<td><center><button id="bt_miles" type="button" class="btn btn-default" onclick="switchMe()">Switch Units of Measure</button></center></td>
+	</tr>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'steps_chart' },
+    title: { text: 'Steps Chart' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Steps'}
+    },
+    series: [
+    {
+      name: "Number of Steps",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 5.days.ago.to_i * 1000 %>,
+      data: [<%= @moves.day5.steps %>,<%= @moves.day4.steps %>,<%= @moves.day3.steps %>,<%= @moves.yesterday.steps %>, <%= @moves.today.steps %>]
+    },
+    {
+      name: "Steps Goals",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 5.days.ago.to_i * 1000 %>,
+      data: [<%= @goals.move_steps %>,<%= @goals.move_steps %>,<%= @goals.move_steps %>,<%= @goals.move_steps %>, <%= @goals.move_steps %>]
+    }]
+  });
+});
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'moves_chart' },
+    title: { text: 'Miles Walked' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Miles'}
+    },
+    series: [{
+      name: "Total Miles",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 5.days.ago.to_i * 1000 %>,
+      data: [<%= @moves.day5.miles %>,<%= @moves.day4.miles %>,<%= @moves.day3.miles %>,<%= @moves.yesterday.miles %>, <%= @moves.today.miles %>]
+    },
+    {
+      name: "Steps Goals",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 5.days.ago.to_i * 1000 %>,
+      data: [<%= @goals.move_steps/2000 %>,<%= @goals.move_steps/2000 %>,<%= @goals.move_steps/2000 %>,<%= @goals.move_steps/2000 %>, <%= @goals.move_steps/2000 %>]
+    }]
+  });
+});
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function () {
+  new Highcharts.Chart({
+    chart: { renderTo: 'burn_chart' },
+    title: { text: 'Active Calories Burned' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Calories Burned'}
+    },
+    series: [
+    {
+      name: "Active Burn",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= 5.days.ago.to_i * 1000 %>,
+      data: [<%= @moves.day5.active_burn %>,<%= @moves.day4.active_burn %>,<%= @moves.day3.active_burn %>,<%= @moves.yesterday.active_burn %>, <%= @moves.today.active_burn %>]
+    }]
+  });
+});
+</script>
+
+<script type="text/javascript" charset="utf-8">
+ $(function () {
+ 	$("#m").toggle();
+ });
+</script>
+
+<br>
+<h2>Steps Details</h2>
+<table>
+	<thead>
+		<td><b><%= 4.days.ago.strftime("%m/%d") %></td>
+		<td><b><%= 3.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 2.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 1.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 0.days.ago.strftime("%m/%d")  %></td>
+	</thead>
+	<tr>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Total Miles</span></td><td><b><%= @moves.day5.miles %></b></td></tr>
+				<tr><td><span class="label label-primary">Number of Steps</span></td><td><b><%= @moves.day5.steps %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Active</span></td><td><b><%= @moves.day5.longest_active %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Idle</span></td><td><b><%= @moves.day5.longest_idle %></b></td></tr>
+				<tr><td><span class="label label-primary">Active Burn</span></td><td><b><%= @moves.day5.active_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Total Burn</span></td><td><b><%= @moves.day5.total_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Steps Goal Met</span></td><td><b><%= @moves.day5.steps > @goals.move_steps %></b></td></tr>
+
+				
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Total Miles</span></td><td><b><%= @moves.day4.miles %></b></td></tr>
+				<tr><td><span class="label label-primary">Number of Steps</span></td><td><b><%= @moves.day4.steps %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Active</span></td><td><b><%= @moves.day4.longest_active %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Idle</span></td><td><b><%= @moves.day4.longest_idle %></b></td></tr>
+				<tr><td><span class="label label-primary">Active Burn</span></td><td><b><%= @moves.day4.active_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Total Burn</span></td><td><b><%= @moves.day4.total_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Steps Goal Met</span></td><td><b><%= @moves.day4.steps > @goals.move_steps %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Total Miles</span></td><td><b><%= @moves.day3.miles %></b></td></tr>
+				<tr><td><span class="label label-primary">Number of Steps</span></td><td><b><%= @moves.day3.steps %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Active</span></td><td><b><%= @moves.day3.longest_active %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Idle</span></td><td><b><%= @moves.day3.longest_idle %></b></td></tr>
+				<tr><td><span class="label label-primary">Active Burn</span></td><td><b><%= @moves.day3.active_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Total Burn</span></td><td><b><%= @moves.day3.total_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Steps Goal Met</span></td><td><b><%= @moves.day3.steps > @goals.move_steps %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Total Miles</span></td><td><b><%= @moves.yesterday.miles %></b></td></tr>
+				<tr><td><span class="label label-primary">Number of Steps</span></td><td><b><%= @moves.yesterday.steps %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Active</span></td><td><b><%= @moves.yesterday.longest_active %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Idle</span></td><td><b><%= @moves.yesterday.longest_idle %></b></td></tr>
+				<tr><td><span class="label label-primary">Active Burn</span></td><td><b><%= @moves.yesterday.active_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Total Burn</span></td><td><b><%= @moves.yesterday.total_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Steps Goal Met</span></td><td><b><%= @moves.yesterday.steps > @goals.move_steps %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Total Miles</span></td><td><b><%= @moves.today.miles %></b></td></tr>
+				<tr><td><span class="label label-primary">Number of Steps</span></td><td><b><%= @moves.today.steps %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Active</span></td><td><b><%= @moves.today.longest_active %></b></td></tr>
+				<tr><td><span class="label label-primary">Longest Idle</span></td><td><b><%= @moves.today.longest_idle %></b></td></tr>
+				<tr><td><span class="label label-primary">Active Burn</span></td><td><b><%= @moves.today.active_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Total Burn</span></td><td><b><%= @moves.today.total_burn %></b></td></tr>
+				<tr><td><span class="label label-primary">Steps Goal Met</span></td><td><b><%= @moves.today.steps > @goals.move_steps %></b></td></tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+<h2>Steps Daily Snapshot</h2>
+<%= image_tag("http://jawbone.com/#{@moves.today.snapshot_url}") %><br><br>
+
+<br>
+<h2>Sleep Details</h2>
+<table>
+	<thead>
+		<td><b><%= 4.days.ago.strftime("%m/%d") %></td>
+		<td><b><%= 3.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 2.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 1.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 0.days.ago.strftime("%m/%d")  %></td>
+	</thead>
+	<tr>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day5.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Fell Asleep in</span></td><td><b><%= @sleeps.day5.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day5.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day5.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day5.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day4.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Fell Asleep in</span></td><td><b><%= @sleeps.day4.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day4.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day4.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day4.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day3.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Fell Asleep in</span></td><td><b><%= @sleeps.day3.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day3.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day3.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day3.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.yesterday.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Fell Asleep in</span></td><td><b><%= @sleeps.yesterday.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.yesterday.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.yesterday.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.yesterday.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.today.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Fell Asleep in</span></td><td><b><%= @sleeps.today.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.today.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.today.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.today.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+
+<div>
+<h3>Output:</h3>
+<span class="label label-primary">Total Sleep Today</span> <%= @sleeps.today.duration %><br><br>
+<span class="label label-primary">Total Number of Move Items</span> <%= @moves.total.count %><br><br>
+<span class="label label-primary">Move Data Structure</span> <%= @moves.total[0] %><br><br>
+
+<ul>
+<% @moves.total.each do |moveItem| %>
+	<li><%= moveItem["details"] %></li>
+<% end %>
+<ul>
+
+</div>
+
+
+

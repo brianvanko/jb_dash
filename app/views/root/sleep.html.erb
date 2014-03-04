@@ -1,0 +1,79 @@
+<div class='media'>
+	<a class='pull-left'><img data-src="holder.js/150%x150" class="img-rounded media-object" style="width: 150px; height: 150px;" src="<%= "http://jawbone.com/#{@current_user.up_image}" %>"></img></a>
+	<div class='media-body'>
+		<h1 class='media-heading'>Welcome <%= @current_user.first_name %> <%= @current_user.last_name %></h1>
+		<h4>Latest Activity on <%= @moves.today.last_updated %></h4>
+		<h6>Steps per Day Goal: <%= @goals.move_steps %></h6>
+		<h6>Hours of Sleep per Day Goal: <%= @goals.sleep_total %></h6>
+	</div>
+</div>
+
+<br>
+<h2>Sleep Details</h2>
+<table>
+	<thead>
+		<td><b><%= 4.days.ago.strftime("%m/%d") %></td>
+		<td><b><%= 3.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 2.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 1.days.ago.strftime("%m/%d")  %></td>
+		<td><b><%= 0.days.ago.strftime("%m/%d")  %></td>
+	</thead>
+	<tr>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day5.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Time to Fall Asleep</span></td><td><b><%= @sleeps.day5.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day5.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day5.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day5.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day4.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Time to Fall Asleep</span></td><td><b><%= @sleeps.day4.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day4.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day4.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day4.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.day3.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Time to Fall Asleep</span></td><td><b><%= @sleeps.day3.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.day3.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.day3.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.day3.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.yesterday.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Time to Fall Asleep</span></td><td><b><%= @sleeps.yesterday.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.yesterday.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.yesterday.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.yesterday.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+		<td>
+			<table class="table table-hover">
+				<tr><td><span class="label label-primary">Sleep Duration</span></td><td><b><%= @sleeps.today.duration %></b></td></tr>
+				<tr><td><span class="label label-primary">Time to Fall Asleep</span></td><td><b><%= @sleeps.today.awake %></b></td></tr>
+				<tr><td><span class="label label-primary">Light Sleep</span></td><td><b><%= @sleeps.today.light %></b></td></tr>
+				<tr><td><span class="label label-primary">Deep Sleep</span></td><td><b><%= @sleeps.today.deep %></b></td></tr>
+				<tr><td><span class="label label-primary">Sleep Goal Met</span></td><td><b><%= @sleeps.today.duration > @goals.sleep_total %></b></td></tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+
+<div>
+<h3>Output:</h3>
+<span class="label label-primary">Total Sleep Today</span> <%= @sleeps.today.duration %><br><br>
+
+</div>
+
+
+
